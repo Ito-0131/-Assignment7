@@ -15,7 +15,7 @@ import java.util.*;
 @Validated
 public class TrainerController {
 
-    private List<StudentForm> studentList = new ArrayList<>();
+    private final List<StudentForm> studentList = new ArrayList<>();
 
     public TrainerController() {
         studentList.add(new StudentForm("10000", "Haruto", "ラウドボーン", LocalDate.of(2008, 1, 31)));
