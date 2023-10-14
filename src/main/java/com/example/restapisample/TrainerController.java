@@ -7,13 +7,11 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 //【課題】HTTPメソッドのGET/POST/PATCH/DELETE のリクエストを扱えるController を実装
 @RestController
-@RequestMapping("/trainer")
+@RequestMapping("/trainers")
 @Validated
 public class TrainerController {
 
@@ -61,25 +59,33 @@ public class TrainerController {
     }
 
     @GetMapping("/names")
-    public ResponseEntity<String> getNames(@RequestParam(value = "name", required = false) String name) {
+    public ResponseEntity<Map<String, String>> getNames(@RequestParam(value = "name", required = false) String name) {
         // クエリ文字列の"name"パラメータが20文字より多いか、nullの場合にエラーメッセージを表示させる
         if (name == null || name.length() > 20) {
-            return ResponseEntity.badRequest().body("Name is more than 20 characters or has not been entered.");
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Name is more than 20 characters or has not been entered.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
 
         // クエリ文字列の"name"パラメータを受け取って処理する
-        return ResponseEntity.ok("RaiseTechへようこそ！ " + name + "さん！");
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "RaiseTechへようこそ！ " + name + "さん！");
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/birthdays")
-    public ResponseEntity<String> getBirthdays(@RequestParam(value = "birthday", required = false) String birthday) {
+    public ResponseEntity<Map<String, String>> getBirthdays(@RequestParam(value = "birthday", required = false) String birthday) {
         // クエリ文字列の"birthday"パラメータがnullの場合にエラーメッセージを表示させる
         if (birthday == null) {
-            return ResponseEntity.badRequest().body("Birthday has not been entered.");
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Birthday has not been entered.");
+            return ResponseEntity.badRequest().body(errorResponse);
         }
 
         // クエリ文字列の"birthday"パラメータを受け取って処理する
-        return ResponseEntity.ok("あなたの誕生日は " + birthday + "ですね");
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "あなたの誕生日は " + birthday + "ですね");
+        return ResponseEntity.ok(response);
     }
 
 
